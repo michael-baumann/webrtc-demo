@@ -3,10 +3,12 @@
     export let stream;
 
     let videoTag;
+    let downstreamAudio;
     $: mainTrack = stream && stream.getTracks()[0];
 
     $: {
-        if (videoTag) videoTag.srcObject = stream;
+        // if (videoTag) videoTag.srcObject = stream;
+        if(downstreamAudio) downstreamAudio.srcObject = stream;
     }
 </script>
 
@@ -15,9 +17,10 @@
 </style>
 
 <label for="downstream">downstream</label>
-<video bind:this={videoTag} autoplay="true" width="400" height="300">
+<!-- <video bind:this={videoTag} autoplay="true" width="400" height="300">
     <track kind="captions" />
-</video>
+</video> -->
+<audio id="upstream" bind:this={downstreamAudio} autoplay="true" controls muted></audio>
 
 {#if mainTrack}
     <Details summary="settings" data={mainTrack.getSettings()} />

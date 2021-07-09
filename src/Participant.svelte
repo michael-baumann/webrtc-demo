@@ -59,11 +59,12 @@
 
     let pcconfig = (() =>
         new URL(document.location).searchParams.get('semantic') === 'unified-plan'
-            ? { sdpSemantics: 'unified-plan' }
+            ? { sdpSemantics: 'plan-b' }
             : { sdpSemantics: 'plan-b' })();
 
     function initPeerConnection() {
-        pcconfig.sdpSemantics === 'unified-plan';
+        // pcconfig.sdpSemantics === 'unified-plan';
+        pcconfig.sdpSemantics === 'plan-b';
 
         const pc = new RTCPeerConnection(pcconfig);
         pc.ontrack = event => {
@@ -125,8 +126,8 @@
     async function createOffer() {
         addEvent('o', 'create offer');
         const offer = await peerConnection.createOffer({
-            offerToReceiveVideo: true,
-            offerToReceiveAudio: false,
+            offerToReceiveVideo: false,
+            offerToReceiveAudio: true,
         });
         localOfferSdp = offer.sdp;
     }

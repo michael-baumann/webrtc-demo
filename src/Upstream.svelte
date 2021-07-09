@@ -3,13 +3,18 @@
     import { onMount, createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
 
-    let upstreamSource = getWebcamFeed;
+    let upstreamSource = getMicrophoneFeed;
     let upstreamVideo;
+    let upstreamAudio;
     let upstreamStream;
     $: mainTrack = upstreamStream && upstreamStream.getTracks()[0];
 
     async function getWebcamFeed() {
         return await navigator.mediaDevices.getUserMedia({ video: true });
+    }
+
+    async function getMicrophoneFeed() {
+        return await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
     }
 
     function getNoiseFeed() {
@@ -31,7 +36,8 @@
         const stream = await upstreamSource();
         console.debug({ stream });
         upstreamStream = stream;
-        upstreamVideo.srcObject = stream;
+        // upstreamVideo.srcObject = stream;
+        upstreamAudio.srcObject = stream;
         dispatch('stream', stream);
     }
 
@@ -53,14 +59,15 @@
 </style>
 
 <label for="upstream">upstream</label>
-<video id="upstream" bind:this={upstreamVideo} autoplay="true" width="400" height="300">
+<!-- <video id="upstream" bind:this={upstreamVideo} autoplay="true" width="400" height="300">
     <track kind="captions" />
-</video>
+</video> -->
+<audio id="upstream" bind:this={upstreamAudio} autoplay="true" controls muted></audio>
 <nav>
 
     <button on:click={startUpstream}>start upstream</button>
     <span>
-        <label>
+        <!-- <label>
             <input type="radio" bind:group={upstreamSource} value={getWebcamFeed} />
             webcam
         </label>
@@ -68,7 +75,12 @@
         <label>
             <input type="radio" bind:group={upstreamSource} value={getNoiseFeed} />
             noise
+        </label> -->
+        <label>
+            <input type="radio" bind:group={upstreamSource} value={getMicrophoneFeed} />
+            audio
         </label>
+
     </span>
 </nav>
 
