@@ -4,7 +4,8 @@
 
     export let signalingClient;
 
-    $: signalingServer = `wss://${window.location.host}/signaling/test`;
+    // $: signalingServer = `wss://${window.location.host}/signaling/test`;
+    $: signalingServer = `wss://127.0.0.1:1500`;
     $:{
         signalingClient.connect({ url: signalingServer });
         window.client = signalingClient;
