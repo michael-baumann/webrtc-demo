@@ -59,13 +59,10 @@
 
     let pcconfig = (() =>
         new URL(document.location).searchParams.get('semantic') === 'unified-plan'
-            ? { sdpSemantics: 'plan-b' }
+            ? { sdpSemantics: 'unified-plan' }
             : { sdpSemantics: 'plan-b' })();
 
     function initPeerConnection() {
-        // pcconfig.sdpSemantics === 'unified-plan';
-        pcconfig.sdpSemantics === 'plan-b';
-
         const pc = new RTCPeerConnection(pcconfig);
         pc.ontrack = event => {
             const { track, streams, transceiver } = event;
@@ -198,6 +195,7 @@
         addEvent('r', 'setRemoteDescription');
         const sessionDesc = packAnswer(receivedOffer);
         peerConnection.setRemoteDescription(sessionDesc);
+        applyCandidates();
         clearCandidatesFrom(name);
     }
 
